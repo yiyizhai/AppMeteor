@@ -22,6 +22,7 @@ if(Apps.find({}).count() < 1){
             Apps.insert(newApp);
         }
         // Project Assignment code goes here
+
         //Get all the apps to an array
         appstoCal = Apps.find({}).fetch();
         for(var i = 0; i < appstoCal.length - 1; i++){
@@ -29,17 +30,10 @@ if(Apps.find({}).count() < 1){
             var recApps = appstoCal[i].reccomendedApps;
             if(recApps != null){
                 for(var j = 0; j < recApps.length - 1; j++){
-                   //Get the app data with the reccomended app_id
-                   var target = appstoCal.filter(function(obj){
-                        return obj.app_id == recApps[j];
-                    })[0];
-                    
                     //Increment the number of recommendations and update it
-                    Apps.remove(target);
-                    target.numberOfRecommendations++;
-                    Apps.insert(target);
-                    
-                }
+                    Apps.update({app_id: recApps[j]}, {$inc: {
+                        numberOfRecommendations: 1}});                                       
+               }
             }
         }
 
